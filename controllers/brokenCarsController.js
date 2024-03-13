@@ -5,7 +5,7 @@ const CustomError = require('../errors/CustomError');
 
 const MAX_YEAR = moment().year();
 
-const getData = async (params) => {
+const getList = async (params) => {
     const Schema = yup.object({
         color: yup.string().color(),
         description: yup.string(),
@@ -85,8 +85,23 @@ const deleteData = async (params) => {
     return true;
 }
 
+const getDetails = async (params) => {
+    const Schema = yup.object({
+        id: yup.number().min(0).positive().required(),
+    });
+
+    const { id } = await Schema.validate(params);
+
+    const row = await brokenCarsModel.getById(id);
+
+    if (!row) throw new CustomError(`Не удалось найти авто с id=${id}`)
+
+    return row;
+}
+
 module.exports = {
-    getData,
+    getList,
+    getDetails,
     createData,
     updateData,
     deleteData

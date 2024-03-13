@@ -5,9 +5,9 @@ const brokenCarsController = require('../controllers/brokenCarsController');
 const { validatePage } = require('../modules/validator');
 
 /**
- * @api {get} /data/list Список сломанных авто
- * @apiName DataList
- * @apiGroup Data
+ * @api {get} /api/broken-cars/list Список сломанных авто
+ * @apiName BrokenCarsList
+ * @apiGroup BrokenCars
  * @apiVersion 0.1.0
  * @apiDescription Получить список сломанных авто
  *
@@ -26,7 +26,7 @@ const { validatePage } = require('../modules/validator');
  * @apiParam {String} [sort] Параметры для сортировки (через запятую, разделяя колонку и способ. Например "year|asc, firstBrokenDate|desc")
  *
  * @apiExample Пример Curl-запроса:
- * curl --location 'http://localhost:8080/api/data/list?sort=year%7Casc%2CfirstBrokenDate%7Cdesc' \
+ * curl --location 'http://localhost:8080/api/broken-cars/list?sort=year%7Casc%2CfirstBrokenDate%7Cdesc' \
  *
  * @apiSuccessExample Успешный ответ:
  *     HTTP/1.1 200 OK
@@ -74,15 +74,78 @@ const { validatePage } = require('../modules/validator');
 router.get('/list', async (req, res) => {
     await validatePage(req.user.roles, 1);
 
-    const data = await brokenCarsController.getData(req.query);
+    const data = await brokenCarsController.getList(req.query);
 
     res.sendSuccess({ data });
 });
 
 /**
- * @api {post} /data/create Создать
- * @apiName DataСreate
- * @apiGroup Data
+ * @api {get} /api/broken-cars/details/:id Детали авто
+ * @apiName BrokenCarsDetails
+ * @apiGroup BrokenCars
+ * @apiVersion 0.1.0
+ * @apiDescription Получить детали сломанного авто
+ *
+ * @apiParam {Integer} id Идентификатор сломанного авто
+ *
+ * @apiExample Пример Curl-запроса:
+ * curl --location 'http://localhost:8080/api/broken-cars/details/1' \
+ *
+ * @apiSuccessExample Успешный ответ:
+ *     HTTP/1.1 200 OK
+ * {
+ *     "data": [
+ *         {
+ *             "id": 1,
+ *             "color": "#1b9d87",
+ *             "description": "Description1",
+ *             "year": 2008,
+ *             "price": "18645.57",
+ *             "firstBrokenDate": "2019-08-10T21:00:00.000Z",
+ *             "createdDate": "2022-09-23T08:27:42.000Z",
+ *             "bodyId": 6,
+ *             "modelId": 8,
+ *             "image": "https://example.com/image8.jpg",
+ *             "blob": {
+ *                 "type": "Buffer",
+ *                 "data": [
+ *                     73,
+ *                     109,
+ *                     97,
+ *                     103,
+ *                     101,
+ *                     32,
+ *                     49
+ *                 ]
+ *             },
+ *             "isActive": true,
+ *             "modelName": "Civic",
+ *             "bodyName": "Wagon"
+ *         }
+ *     ],
+ *     "success": true
+ * }
+ *
+ * @apiErrorExample Ошибка, связанная с БД:
+ *     HTTP/1.1 401 OK
+ *     {
+ *       "success": false,
+ *       "error": "DB error. Code: 42P01"
+ *     }
+ */
+
+router.get('/details/:id', async (req, res) => {
+    await validatePage(req.user.roles, 1);
+
+    const data = await brokenCarsController.getDetails(req.params);
+
+    res.sendSuccess({ data });
+});
+
+/**
+ * @api {post} /api/broken-cars/create Создать
+ * @apiName BrokenCarsСreate
+ * @apiGroup BrokenCars
  * @apiVersion 0.1.0
  * @apiDescription Добавить данные о сломанном авто
  *
@@ -95,7 +158,7 @@ router.get('/list', async (req, res) => {
  * @apiParam {Number} modelId Идентификатор модели
  *
  * @apiExample Пример Curl-запроса:
- * curl --location --request POST 'http://localhost:8080/api/data/create' \
+ * curl --location --request POST 'http://localhost:8080/api/broken-cars/create' \
  * --header 'Content-Type: application/json' \
  * --data '
  *    {
@@ -131,9 +194,9 @@ router.post('/create', async (req, res) => {
 });
 
 /**
- * @api {put} /data/edit/:id Изменить
- * @apiName DataEdit
- * @apiGroup Data
+ * @api {put} /api/broken-cars/edit/:id Изменить
+ * @apiName BrokenCarsEdit
+ * @apiGroup BrokenCars
  * @apiVersion 0.1.0
  * @apiDescription Получить изменить информацию о сломанном авто
  *
@@ -147,7 +210,7 @@ router.post('/create', async (req, res) => {
  * @apiParam {Integer} [modelId] Идентификатор модели
  *
  * @apiExample Пример Curl-запроса:
- * curl --location --request PUT 'http://localhost:8080/api/data/edit/1' \
+ * curl --location --request PUT 'http://localhost:8080/api/broken-cars/edit/1' \
  * --header 'Content-Type: application/json' \
  * --data '
  *    {
@@ -169,16 +232,16 @@ router.put('/edit/:id', async (req, res) => {
 });
 
 /**
- * @api {delete} /data/delete/:id Удалить
- * @apiName DataDelete
- * @apiGroup Data
+ * @api {delete} /api/broken-cars/delete/:id Удалить
+ * @apiName BrokenCarsDelete
+ * @apiGroup BrokenCars
  * @apiVersion 0.1.0
  * @apiDescription Удалить сломанное авто
  *
  * @apiParam {Integer} id Идентификатор сломанного авто
  *
  * @apiExample Пример Curl-запроса:
- * curl --location --request DELETE 'http://localhost:8080/api/data/delete/1' \
+ * curl --location --request DELETE 'http://localhost:8080/api/broken-cars/delete/1' \
  */
 
 router.delete('/delete/:id', async (req, res) => {

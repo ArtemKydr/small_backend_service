@@ -42,7 +42,7 @@ const deleteRow = (id) => {
 };
 
 const getById = (id) => {
-    return db('broken_cars').where({id, isActive: true}).first();
+    return db('data_list_details_view').where({id, isActive: true}).first();
 };
 
 module.exports = {

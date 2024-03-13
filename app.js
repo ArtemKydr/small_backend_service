@@ -17,7 +17,7 @@ app.use(require('./middleware/formatter'));
 app.use('/auth', require('./router/auth'));
 app.use(require('./middleware/checkCredentials'));
 
-app.use('/api/data', require('./router/data'));
+app.use('/api/broken-cars', require('./router/broken-cars'));
 
 app.use((req, res, next) => {
     res.sendStatus(404);
