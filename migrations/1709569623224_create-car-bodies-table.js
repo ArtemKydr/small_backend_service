@@ -1,0 +1,10 @@
+exports.up = pgm => {
+    pgm.createTable('car_bodies', {
+        id: 'id',
+        name: { type: 'varchar(255)', notNull: true },
+    });
+};
+
+exports.down = pgm => {
+    pgm.dropTable('car_bodies');
+};
