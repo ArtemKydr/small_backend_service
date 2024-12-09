@@ -3,7 +3,7 @@ const { decode } = require('../modules/utils');
 const yup = require('yup');
 const moment = require('moment');
 
-const validatePage = async (userRoles, targetRole) => {
+const validatePage = (userRoles, targetRole) => {
     const errorMessage = 'У пользователя нет необходимой роли для доступа к этой странице';
 
     const userRolesArr = decode(userRoles);
@@ -16,17 +16,12 @@ const validatePage = async (userRoles, targetRole) => {
 }
 
 const validateSortColumns = (sortColumns, sortBy) => {
-    if (!sortColumns.includes(sortBy)) {
-        throw new ValidationError('Ошибка: Недопустимый столбец для сортировки');
-    }
+    if (!sortColumns.includes(sortBy)) throw new ValidationError('Ошибка: Недопустимый столбец для сортировки');
 }
 
 const validateSortOrders = (sortOrder) => {
     const validSortOrders = ['asc', 'desc'];
-
-    if (!validSortOrders.includes(sortOrder)) {
-        throw new ValidationError('Ошибка: Недопустимый порядок сортировки');
-    }
+    if (!validSortOrders.includes(sortOrder)) throw new ValidationError('Ошибка: Недопустимый порядок сортировки');
 }
 
 const validateFilters = (filter) => {

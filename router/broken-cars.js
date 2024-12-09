@@ -72,7 +72,7 @@ const { validatePage } = require('../modules/validator');
  */
 
 router.get('/list', async (req, res) => {
-    await validatePage(req.user.roles, 1);
+    validatePage(req.user.roles, 1);
 
     const data = await brokenCarsController.getList(req.query);
 
@@ -135,7 +135,7 @@ router.get('/list', async (req, res) => {
  */
 
 router.get('/details/:id', async (req, res) => {
-    await validatePage(req.user.roles, 1);
+    validatePage(req.user.roles, 1);
 
     const data = await brokenCarsController.getDetails(req.params);
 
@@ -186,7 +186,7 @@ router.get('/details/:id', async (req, res) => {
  *     }
  */
 router.post('/create', async (req, res) => {
-    await validatePage(req.user.roles, 2);
+    validatePage(req.user.roles, 2);
 
     const newBrokenCarId = await brokenCarsController.createData(req.body);
 
@@ -224,7 +224,7 @@ router.post('/create', async (req, res) => {
  * '
  */
 router.put('/edit/:id', async (req, res) => {
-    await validatePage(req.user.roles, 4);
+    validatePage(req.user.roles, 4);
 
     const data = await brokenCarsController.updateData({...req.params, ...req.body});
 
@@ -245,7 +245,7 @@ router.put('/edit/:id', async (req, res) => {
  */
 
 router.delete('/delete/:id', async (req, res) => {
-    await validatePage(req.user.roles, 8);
+    validatePage(req.user.roles, 8);
 
     await brokenCarsController.deleteData(req.params);
 
